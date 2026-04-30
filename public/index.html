@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Max Downloader</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: linear-gradient(135deg,#141e30,#243b55);
+    color: white;
+    text-align: center;
+}
+
+.container {
+    margin-top: 100px;
+}
+
+input {
+    width: 80%;
+    max-width: 500px;
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+}
+
+button {
+    margin-top: 20px;
+    padding: 12px 30px;
+    border-radius: 10px;
+    border: none;
+    background: red;
+    color: white;
+    cursor: pointer;
+}
+
+.result {
+    margin-top: 30px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Max YouTube Downloader 🚀</h1>
+
+    <input id="url" placeholder="Paste YouTube link">
+    <br>
+    <button onclick="download()">Download</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+async function download() {
+    let url = document.getElementById("url").value;
+
+    document.getElementById("result").innerHTML = "⏳ Loading...";
+
+    const res = await fetch(`http://localhost:3000/api/download?url=${encodeURIComponent(url)}`);
+    const data = await res.json();
+
+    if (data.error) {
+        document.getElementById("result").innerHTML = "❌ " + data.error;
+    } else {
+        document.getElementById("result").innerHTML = `
+            <h3>${data.title}</h3>
+            <a href="${data.download}" target="_blank">
+                <button>Download Video</button>
+            </a>
+        `;
+    }
+}
+</script>
+
+</body>
+</html>

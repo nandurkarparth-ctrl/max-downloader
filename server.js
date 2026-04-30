@@ -14,11 +14,13 @@ app.get("/api/download", async (req, res) => {
             return res.json({ error: "No URL provided" });
         }
 
-        const downloadLink = `https://en.savefrom.net/1-youtube-video-downloader?url=${encodeURIComponent(url)}`;
-
         res.json({
-            title: "Click below to download",
-            download: downloadLink
+            title: "Choose download option",
+            links: [
+                `https://ssyoutube.com/watch?v=${url.split("v=")[1]}`,
+                `https://y2mate.is/watch?v=${url.split("v=")[1]}`,
+                `https://9xbuddy.com/process?url=${encodeURIComponent(url)}`
+            ]
         });
 
     } catch (err) {

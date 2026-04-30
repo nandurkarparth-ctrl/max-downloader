@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Max YouTube Downloader</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #141e30, #243b55);
+    color: white;
+    text-align: center;
+}
+
+.container {
+    padding: 20px;
+    margin-top: 80px;
+}
+
+h1 {
+    font-size: 2.2rem;
+}
+
+input {
+    width: 90%;
+    max-width: 500px;
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+button {
+    margin-top: 20px;
+    padding: 12px 25px;
+    border-radius: 10px;
+    border: none;
+    background: #ff3b3b;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #ff0000;
+}
+
+.result-box {
+    margin-top: 30px;
+    padding: 20px;
+}
+
+.card {
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.download-btn {
+    background: green;
+    margin-top: 15px;
+}
+
+.footer {
+    margin-top: 80px;
+    opacity: 0.7;
+    font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>🚀 Max YouTube Downloader</h1>
+    <p>Fast • Free • Mobile Friendly</p>
+
+    <input type="text" id="url" placeholder="Paste YouTube video link here">
+    <br>
+    <button onclick="download()">Download</button>
+
+    <div class="result-box" id="result"></div>
+</div>
+
+<div class="footer">
+    <p>Powered by Max is Alive</p>
+    <a href="https://maxisalive-tools.com/Home" style="color:white;">Go to Home</a>
+</div>
+
+<script>
+async function download() {
+    let url = document.getElementById("url").value.trim();
+
+    // ❌ Empty
+    if (!url) {
+        document.getElementById("result").innerHTML =
+            "<p style='color:orange;'>⚠️ Please paste a URL</p>";
+        return;
+    }
+
+    document.getElementById("result").innerHTML = "⏳ Processing...";
+
+    try {
+        const res = await fetch(`https://max-downloader.onrender.com/api/download?url=${encodeURIComponent(url)}`);
+        const data = await res.json();
+
+        // ❌ Error
+        if (data.error) {
+            document.getElementById("result").innerHTML =
+                `<p style="color:red;">❌ ${data.error}</p>`;
+            return;
+        }
+
+        // ✅ Success UI
+        document.getElementById("result").innerHTML = `
+    <div class="card">
+        <h3>${data.title}</h3>
+
+        <button onclick="openLink('${data.links[0]}')">⬇️ Option 1</button>
+        <button onclick="openLink('${data.links[1]}')">⬇️ Option 2</button>
+        <button onclick="openLink('${data.links[2]}')">⬇️ Option 3</button>
+    </div>
+`;
+
+function openLink(link) {
+    window.open(link, "_blank");
+}
+
+        // ✅ Click event
+        document.getElementById("downloadBtn").addEventListener("click", function () {
+            window.open(data.download, "_blank");
+        });
+
+    } catch (err) {
+        document.getElementById("result").innerHTML =
+            "<p style='color:red;'>❌ Server error</p>";
+    }
+}
+</script>
+
+</body>
+</html>

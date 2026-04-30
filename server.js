@@ -1,3 +1,16 @@
+const express = require("express");
+const ytdl = require("ytdl-core");
+const cors = require("cors");
+
+const app = express();
+app.use(cors());
+
+// Home route (optional)
+app.get("/", (req, res) => {
+    res.send("Max Downloader Backend Running 🚀");
+});
+
+// Download API
 app.get("/api/download", async (req, res) => {
     try {
         let url = req.query.url;
@@ -19,7 +32,6 @@ app.get("/api/download", async (req, res) => {
 
         console.log("Using URL:", url);
 
-        // ❌ REMOVE validateURL (important)
         const info = await ytdl.getInfo(url);
 
         const format = ytdl.chooseFormat(info.formats, {
@@ -35,7 +47,7 @@ app.get("/api/download", async (req, res) => {
             download: format.url
         });
 
-    } catch (err) {
+    } catch (err) {   // ✅ FIXED
         console.log("ERROR:", err.message);
 
         res.json({
@@ -43,4 +55,11 @@ app.get("/api/download", async (req, res) => {
             details: err.message
         });
     }
+});
+
+// PORT FIX (IMPORTANT FOR RENDER)
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log("✅ Max Downloader Backend Running 🚀");
 });

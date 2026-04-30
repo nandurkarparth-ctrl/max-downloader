@@ -1,39 +1,44 @@
-const express = require("express");
-const ytdl = require("ytdl-core");
-const cors = require("cors");
-
-const app = express();
-app.use(cors());
-
 app.get("/api/download", async (req, res) => {
     try {
-        const url = req.query.url;
+        let url = req.query.url;
 
-        if (!ytdl.validateURL(url)) {
-            return res.json({ error: "Invalid YouTube URL" });
+        if (!url) {
+            return res.json({ error: "No URL provided" });
         }
 
-        const info = await ytdl.getInfo(url);
+        // Fix Shorts URL
+        if (url.includes("shorts")) {
+            const id = url.split("/shorts/")[1].split("?")[0];
+            url = `https://www.youtube.com/watch?v=${id}`;
+        }
 
-        const title = info.videoDetails.title;
+        if (!url.startsWith("http")) {
+            url = "https://" + url;
+        }
+
+        console.log("URL:", url);
+
+        const info = await ytdl.getInfo(url);
 
         const format = ytdl.chooseFormat(info.formats, {
             quality: "18"
         });
 
+        if (!format || !format.url) {
+            return res.json({ error: "No downloadable format found" });
+        }
+
         res.json({
-            title: title,
+            title: info.videoDetails.title,
             download: format.url
         });
 
     } catch (err) {
-        res.json({
-    error: "Server error",
-    details: err.message
-});
-    }
-});
+        console.log("FULL ERROR:", err);
 
-app.listen(3000, () => {
-    console.log("ERROR:", err);
+        res.json({
+            error: "Server error",
+            details: err.message   // 👈 IMPORTANT LINE
+        });
+    }
 });

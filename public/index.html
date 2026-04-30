@@ -87,7 +87,16 @@ async function download() {
         // ✅ Success
         document.getElementById("result").innerHTML = `
             <h3>${data.title}</h3>
-            <a href="${data.download}" target="_blank">
+            document.getElementById("result").innerHTML = `
+    <h3>${data.title}</h3>
+    <button onclick="openDownload('${data.download}')">
+        ⬇️ Download Video
+    </button>
+`;
+
+function openDownload(link) {
+    window.open(link, "_blank");
+}
                 <button>Download Video</button>
             </a>
         `;

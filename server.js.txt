@@ -12,12 +12,14 @@ app.get("/api/download", async (req, res) => {
             url = `https://www.youtube.com/watch?v=${id}`;
         }
 
+        // Ensure https
         if (!url.startsWith("http")) {
             url = "https://" + url;
         }
 
-        console.log("URL:", url);
+        console.log("Using URL:", url);
 
+        // ❌ REMOVE validateURL (important)
         const info = await ytdl.getInfo(url);
 
         const format = ytdl.chooseFormat(info.formats, {
@@ -34,11 +36,11 @@ app.get("/api/download", async (req, res) => {
         });
 
     } catch (err) {
-        console.log("FULL ERROR:", err);
+        console.log("ERROR:", err.message);
 
         res.json({
             error: "Server error",
-            details: err.message   // 👈 IMPORTANT LINE
+            details: err.message
         });
     }
 });

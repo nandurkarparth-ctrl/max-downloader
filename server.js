@@ -27,10 +27,13 @@ app.get("/api/download", async (req, res) => {
         });
 
     } catch (err) {
-        res.json({ error: "Server error" });
+        res.json({
+    error: "Server error",
+    details: err.message
+});
     }
 });
 
 app.listen(3000, () => {
-    console.log("✅ Max Downloader Backend Running 🚀");
+    console.log("ERROR:", err);
 });

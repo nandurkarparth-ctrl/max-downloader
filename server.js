@@ -25,13 +25,14 @@ app.get("/api/download", async (req, res) => {
             url = `https://www.youtube.com/watch?v=${id}`;
         }
 
-        // Ensure https
+        // Ensure full URL
         if (!url.startsWith("http")) {
             url = "https://" + url;
         }
 
-        console.log("Using URL:", url);
+        console.log("URL RECEIVED:", url);
 
+        // ❗ NO validateURL here
         const info = await ytdl.getInfo(url);
 
         const format = ytdl.chooseFormat(info.formats, {
@@ -47,7 +48,7 @@ app.get("/api/download", async (req, res) => {
             download: format.url
         });
 
-    } catch (err) {   // ✅ FIXED
+    } catch (err) {
         console.log("ERROR:", err.message);
 
         res.json({

@@ -6,13 +6,6 @@ const app = express();
 app.use(cors());
 
 // Home route (optional)
-app.get("/", (req, res) => {
-    res.send("Max Downloader Backend Running 🚀");
-});
-
-// Download API
-const axios = require("axios");
-
 app.get("/api/download", async (req, res) => {
     try {
         const url = req.query.url;
@@ -21,19 +14,17 @@ app.get("/api/download", async (req, res) => {
             return res.json({ error: "No URL provided" });
         }
 
-        // Example free API (you can change later)
-        const api = `https://api.vevioz.com/api/button/mp4?url=${encodeURIComponent(url)}`;
+        const downloadLink = `https://en.savefrom.net/1-youtube-video-downloader?url=${encodeURIComponent(url)}`;
 
         res.json({
             title: "Click below to download",
-            download: api
+            download: downloadLink
         });
 
     } catch (err) {
         res.json({ error: "Server error" });
     }
 });
-
 // PORT FIX (IMPORTANT FOR RENDER)
 const PORT = process.env.PORT || 3000;
 
